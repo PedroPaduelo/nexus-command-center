@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import {
   X,
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import { useWorkspaceStore } from '../stores/useWorkspaceStore'
+import type { FloatingPanel } from '../types/workspace.types'
 
 const LOG_ENTRIES = [
   { time: '14:32:01', level: 'info', msg: '[nexus-prime] Task dispatched to Code Artisan' },
@@ -46,18 +47,17 @@ const TERMINAL_LINES = [
   { type: 'prompt', text: 'nexus@workspace:~$', color: 'text-emerald-400' },
 ]
 
-function TerminalPanel() {
+function TerminalContent() {
   const [lines] = useState(TERMINAL_LINES)
   const [input, setInput] = useState('')
-  const outputRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    outputRef.current?.scrollTo(0, outputRef.current.scrollHeight)
-  }, [lines])
+  const outputRef = { current: null as HTMLDivElement | null }
 
   return (
     <div className="h-full flex flex-col bg-black/80">
-      <div className="flex-1 overflow-y-auto font-mono text-[11px] p-3 space-y-0.5" ref={outputRef}>
+      <div
+        className="flex-1 overflow-y-auto font-mono text-[11px] p-3 space-y-0.5"
+        ref={outputRef}
+      >
         {lines.map((line, i) => (
           <div key={i} className={cn('leading-5', line.color)}>
             {line.text}
@@ -77,11 +77,9 @@ function TerminalPanel() {
   )
 }
 
-function LogsPanel() {
-  const [filter, setFilter] = useState<'all' | 'info' | 'tool' | 'success' | 'error'>('all')
-
+function LogsContent() {
+  const [filter, setFilter] = useState<'all' | 'info' | 'tool' | 'success'>('all')
   const filtered = filter === 'all' ? LOG_ENTRIES : LOG_ENTRIES.filter((l) => l.level === filter)
-
   const levelColors: Record<string, string> = {
     info: 'text-blue-400',
     tool: 'text-cyan-400',
@@ -98,9 +96,7 @@ function LogsPanel() {
             onClick={() => setFilter(f)}
             className={cn(
               'px-2 py-1 rounded text-[10px] font-mono uppercase transition-colors',
-              filter === f
-                ? 'bg-white/10 text-white'
-                : 'text-white/30 hover:text-white/50'
+              filter === f ? 'bg-white/10 text-white' : 'text-white/30 hover:text-white/50'
             )}
           >
             {f}
@@ -122,24 +118,22 @@ function LogsPanel() {
   )
 }
 
-function PlaygroundPanel() {
+function PlaygroundContent() {
   const [selected, setSelected] = useState(0)
   const [output, setOutput] = useState('')
   const [running, setRunning] = useState(false)
 
   const runCommand = (index: number) => {
-    const cmd = PLAYGROUND_COMMANDS[index]
+    setSelected(index)
     setRunning(true)
     setOutput('')
-
     const outputs = [
-      'Executing: ' + cmd.cmd + '\n\n⏳ Agent ' + cmd.agent + ' is thinking...\n\n✅ Completed in 1.2s\n📊 Tokens used: 342\n🎯 Status: success',
-      'Executing: ' + cmd.cmd + '\n\n⏳ Generating component...\n\n✅ DataTable.tsx created (48 lines)\n📊 Tokens used: 218\n🎯 Status: success',
-      'Executing: ' + cmd.cmd + '\n\n⏳ Searching...\n\n🔬 Found 12 relevant patterns\n📊 Tokens used: 156\n🎯 Status: success',
-      'Executing: ' + cmd.cmd + '\n\n⏳ Exporting...\n\n🎨 18 design tokens exported to tokens.json\n📊 Tokens used: 89\n🎯 Status: success',
-      'Executing: ' + cmd.cmd + '\n\n⏳ Planning sprint...\n\n📋 Sprint v2.1 created with 23 tasks\n📊 Tokens used: 201\n🎯 Status: success',
+      'Executing: ' + PLAYGROUND_COMMANDS[index].cmd + '\n\n⏳ Agent ' + PLAYGROUND_COMMANDS[index].agent + ' is thinking...\n\n✅ Completed in 1.2s\n📊 Tokens used: 342\n🎯 Status: success',
+      'Executing: ' + PLAYGROUND_COMMANDS[index].cmd + '\n\n⏳ Generating component...\n\n✅ DataTable.tsx created (48 lines)\n📊 Tokens used: 218\n🎯 Status: success',
+      'Executing: ' + PLAYGROUND_COMMANDS[index].cmd + '\n\n⏳ Searching...\n\n🔬 Found 12 relevant patterns\n📊 Tokens used: 156\n🎯 Status: success',
+      'Executing: ' + PLAYGROUND_COMMANDS[index].cmd + '\n\n⏳ Exporting...\n\n🎨 18 design tokens exported to tokens.json\n📊 Tokens used: 89\n🎯 Status: success',
+      'Executing: ' + PLAYGROUND_COMMANDS[index].cmd + '\n\n⏳ Planning sprint...\n\n📋 Sprint v2.1 created with 23 tasks\n📊 Tokens used: 201\n🎯 Status: success',
     ]
-
     setTimeout(() => {
       setOutput(outputs[index])
       setRunning(false)
@@ -148,18 +142,22 @@ function PlaygroundPanel() {
 
   return (
     <div className="h-full flex flex-col bg-[#08080a]">
-      {/* Command list */}
       <div className="shrink-0 divide-y divide-white/[0.05]">
         {PLAYGROUND_COMMANDS.map((cmd, i) => (
           <button
             key={i}
-            onClick={() => { setSelected(i); runCommand(i) }}
+            onClick={() => runCommand(i)}
             className={cn(
               'w-full flex items-center gap-2 px-3 py-2.5 text-left transition-colors',
               selected === i ? 'bg-white/[0.05]' : 'hover:bg-white/[0.03]'
             )}
           >
-            <ChevronRight className={cn('h-3 w-3 shrink-0 transition-colors', selected === i ? 'text-white/60' : 'text-white/20')} />
+            <ChevronRight
+              className={cn(
+                'h-3 w-3 shrink-0 transition-colors',
+                selected === i ? 'text-white/60' : 'text-white/20'
+              )}
+            />
             <div className="flex-1 min-w-0">
               <p className="text-[11px] font-mono text-white/70 truncate">{cmd.cmd}</p>
               <p className="text-[10px] text-white/30 mt-0.5 truncate">{cmd.desc}</p>
@@ -168,8 +166,6 @@ function PlaygroundPanel() {
           </button>
         ))}
       </div>
-
-      {/* Output */}
       <div className="flex-1 border-t border-white/[0.06] overflow-y-auto">
         <div className="p-3 font-mono text-[11px] leading-5">
           {running && (
@@ -203,44 +199,37 @@ function PlaygroundPanel() {
   )
 }
 
-const panelConfig = {
-  terminal: { title: 'Terminal', icon: TerminalIcon, component: TerminalPanel },
-  logs: { title: 'Logs', icon: ScrollText, component: LogsPanel },
-  playground: { title: 'Playground', icon: Sparkles, component: PlaygroundPanel },
+type PanelType = 'terminal' | 'logs' | 'playground'
+
+const panelMeta: Record<PanelType, { title: string; icon: React.ElementType }> = {
+  terminal: { title: 'Terminal', icon: TerminalIcon },
+  logs: { title: 'Logs', icon: ScrollText },
+  playground: { title: 'Playground', icon: Sparkles },
 }
 
-interface FloatingPanelProps {
-  panelId: string
-  type: 'terminal' | 'logs' | 'playground'
-  position: { x: number; y: number }
-  size: { width: number; height: number }
-  isMinimized: boolean
+const panelContent: Record<PanelType, React.FC> = {
+  terminal: TerminalContent,
+  logs: LogsContent,
+  playground: PlaygroundContent,
+}
+
+interface FloatingPanelLayerProps {
+  panel: FloatingPanel
   onClose: () => void
   onMinimize: () => void
-  onExpand: () => void
   onDrag: (dx: number, dy: number) => void
 }
 
-function FloatingPanelComponent({
-  panelId,
-  type,
-  position,
-  size,
-  isMinimized,
-  onClose,
-  onMinimize,
-  onExpand,
-  onDrag,
-}: FloatingPanelProps) {
-  const cfg = panelConfig[type]
-  const Icon = cfg.icon
-  const Content = cfg.component.component
-
+function FloatingPanelLayer({ panel, onClose, onMinimize, onDrag }: FloatingPanelLayerProps) {
   const [dragging, setDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const meta = panelMeta[panel.type]
+  const Content = panelContent[panel.type]
+  const Icon = meta.icon
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('.panel-actions')) return
+    const target = e.target as HTMLElement
+    if (target.closest('.panel-actions')) return
     setDragging(true)
     setDragStart({ x: e.clientX, y: e.clientY })
   }
@@ -248,9 +237,7 @@ function FloatingPanelComponent({
   useEffect(() => {
     if (!dragging) return
     const handleMouseMove = (e: MouseEvent) => {
-      const dx = e.clientX - dragStart.x
-      const dy = e.clientY - dragStart.y
-      onDrag(dx, dy)
+      onDrag(e.clientX - dragStart.x, e.clientY - dragStart.y)
       setDragStart({ x: e.clientX, y: e.clientY })
     }
     const handleMouseUp = () => setDragging(false)
@@ -262,9 +249,6 @@ function FloatingPanelComponent({
     }
   }, [dragging, dragStart, onDrag])
 
-  const panelWidth = isMinimized ? 200 : size.width
-  const panelHeight = isMinimized ? 40 : size.height
-
   return (
     <motion.div
       layout
@@ -274,15 +258,13 @@ function FloatingPanelComponent({
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       className="absolute rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl"
       style={{
-        left: position.x,
-        top: position.y,
-        width: panelWidth,
-        height: panelHeight,
-        minWidth: 200,
-        minHeight: isMinimized ? 40 : 200,
+        left: panel.position.x,
+        top: panel.position.y,
+        width: panel.isMinimized ? 200 : panel.size.width,
+        height: panel.isMinimized ? 40 : panel.size.height,
         background: 'rgba(10,10,15,0.95)',
         backdropFilter: 'blur(20px)',
-        zIndex: 10,
+        zIndex: panel.zIndex,
       }}
     >
       {/* Title bar */}
@@ -293,15 +275,14 @@ function FloatingPanelComponent({
         <div className="flex items-center gap-2">
           <GripHorizontal className="h-3 w-3 text-white/20" />
           <Icon className="h-3.5 w-3.5 text-white/40" />
-          <span className="text-[11px] font-medium text-white/60">{cfg.title}</span>
+          <span className="text-[11px] font-medium text-white/60">{meta.title}</span>
         </div>
-
         <div className="flex items-center gap-1 panel-actions">
           <button
             onClick={onMinimize}
             className="p-1 rounded text-white/30 hover:text-white/60 transition-colors"
           >
-            {isMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
+            {panel.isMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
           </button>
           <button
             onClick={onClose}
@@ -313,8 +294,8 @@ function FloatingPanelComponent({
       </div>
 
       {/* Content */}
-      {!isMinimized && (
-        <div style={{ height: panelHeight - 40 }}>
+      {!panel.isMinimized && (
+        <div style={{ height: panel.size.height - 40 }}>
           <Content />
         </div>
       )}
@@ -326,13 +307,14 @@ export function FloatingPanelsLayer() {
   const floatingPanels = useWorkspaceStore((s) => s.floatingPanels)
   const updatePanel = useWorkspaceStore((s) => s.updateFloatingPanel)
   const removePanel = useWorkspaceStore((s) => s.removeFloatingPanel)
+  const setFloatingPanel = useWorkspaceStore((s) => s.setFloatingPanel)
 
-  const togglePanel = (type: 'terminal' | 'logs' | 'playground') => {
+  const togglePanel = (type: PanelType) => {
     const existing = floatingPanels.find((p) => p.id === type)
     if (existing) {
       removePanel(type)
     } else {
-      useWorkspaceStore.getState().setFloatingPanel({
+      setFloatingPanel({
         id: type,
         type,
         position: { x: 200 + floatingPanels.length * 30, y: 100 + floatingPanels.length * 30 },
@@ -343,13 +325,15 @@ export function FloatingPanelsLayer() {
     }
   }
 
+  const allTypes: PanelType[] = ['terminal', 'logs', 'playground']
+
   return (
     <>
       {/* Floating panel toolbar */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 bg-black/80 backdrop-blur-xl rounded-xl border border-white/[0.08] p-1">
-        {(['terminal', 'logs', 'playground'] as const).map((type) => {
-          const cfg = panelConfig[type]
-          const Icon = cfg.icon
+        {allTypes.map((type) => {
+          const meta = panelMeta[type]
+          const Icon = meta.icon
           const isOpen = floatingPanels.some((p) => p.id === type)
           return (
             <button
@@ -363,7 +347,7 @@ export function FloatingPanelsLayer() {
               )}
             >
               <Icon className="h-3.5 w-3.5" />
-              {cfg.title}
+              {meta.title}
             </button>
           )
         })}
@@ -372,18 +356,13 @@ export function FloatingPanelsLayer() {
       {/* Floating panels */}
       <AnimatePresence>
         {floatingPanels.map((panel) => (
-          <FloatingPanelComponent
+          <FloatingPanelLayer
             key={panel.id}
-            panelId={panel.id}
-            type={panel.type}
-            position={panel.position}
-            size={panel.size}
-            isMinimized={panel.isMinimized}
+            panel={panel}
             onClose={() => removePanel(panel.id)}
             onMinimize={() =>
               updatePanel(panel.id, { isMinimized: !panel.isMinimized })
             }
-            onExpand={() => updatePanel(panel.id, { isMinimized: false })}
             onDrag={(dx, dy) =>
               updatePanel(panel.id, {
                 position: {

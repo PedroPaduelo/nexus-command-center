@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus Command Center — Docs</title>
+  <style>
+    :root {
+      --bg: #06060a;
+      --surface: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+    header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; background: linear-gradient(135deg, #fff 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h2 { font-size: 1.25rem; font-weight: 600; color: #fff; margin: 2rem 0 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    h3 { font-size: 1rem; font-weight: 600; color: #cbd5e1; margin: 1.25rem 0 0.5rem; }
+    p { color: #94a3b8; margin-bottom: 0.75rem; }
+    code { font-family: var(--mono); font-size: 0.875em; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 0.1em 0.4em; color: #93c5fd; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 0.75rem 0; }
+    pre code { background: none; border: none; padding: 0; }
+    ul { list-style: none; padding-left: 1rem; }
+    li { color: #94a3b8; margin-bottom: 0.4rem; position: relative; }
+    li::before { content: '▸'; position: absolute; left: -1rem; color: var(--blue); }
+    .tag { display: inline-block; font-size: 0.7rem; font-family: var(--mono); background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); border-radius: 4px; padding: 0.1em 0.5em; margin-right: 0.25rem; }
+    .tag-purple { background: rgba(168,85,247,0.15); color: #c084fc; border-color: rgba(168,85,247,0.3); }
+    .tag-emerald { background: rgba(16,185,129,0.15); color: #6ee7b7; border-color: rgba(16,185,129,0.3); }
+    .badge { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.25em 0.6em; border-radius: 9999px; font-size: 0.75rem; background: var(--surface); border: 1px solid var(--border); }
+    .badge-blue { border-color: rgba(59,130,246,0.4); color: #93c5fd; }
+    .badge-purple { border-color: rgba(168,85,247,0.4); color: #c084fc; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin: 0.75rem 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--mono); }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: #fff; margin-top: 0.25rem; }
+    .nav { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .nav a { color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.4em 0.8em; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
+    .nav a:hover, .nav a.active { color: #fff; background: var(--surface); border-color: var(--border); }
+    section { margin-bottom: 3rem; }
+    .step { display: flex; gap: 0.75rem; margin: 0.75rem 0; align-items: flex-start; }
+    .step-num { min-width: 1.5rem; height: 1.5rem; border-radius: 50%; background: rgba(59,130,246,0.2); color: #93c5fd; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; font-family: var(--mono); }
+    .step-content { flex: 1; }
+    .step-content p { margin: 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="nav">
+      <a href="index.html" class="active">Visao Geral</a>
+      <a href="guia-workspace.html">Workspace</a>
+      <a href="guia-workspace.html#canvas">Canvas</a>
+      <a href="guia-workspace.html#agents">Agentes</a>
+      <a href="guia-workspace.html#chat">Chat</a>
+    </div>
+    <h1>Nexus Command Center</h1>
+    <p style="margin-top: 0.5rem;">Visual orchestration dashboard com React Flow — monitore e interaja com agentes de IA em tempo real.</p>
+  </header>
+
+  <section id="overview">
+    <h2>Visao Geral</h2>
+    <p>O Nexus Command Center e um dashboard de orquestracao visual que permite monitorar agentes de IA em tempo real. Cada agente e representado como um no no canvas, com conexoes animadas que mostram o fluxo de dados entre eles.</p>
+
+    <div class="grid">
+      <div class="stat-card">
+        <div class="stat-label">Agentes ativos</div>
+        <div class="stat-value">4 / 5</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tasks concluidas</div>
+        <div class="stat-value">127</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tokens usados</div>
+        <div class="stat-value">843K</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Taxa de sucesso</div>
+        <div class="stat-value">94%</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="views">
+    <h2>Views Disponiveis</h2>
+    <div class="card">
+      <h3><span class="tag">Dashboard</span> Canvas de Orquestracao</h3>
+      <p>Vista principal com canvas visual, sidebar de navegacao, topbar com breadcrumbs e panel de metricas. Use para ter uma visao geral do sistema.</p>
+    </div>
+    <div class="card">
+      <h3><span class="tag tag-purple">Workspace</span> Workspace de Agentes</h3>
+      <p>Vista expandida com canvas de agentes conectados, chat em tempo real, ticker de eventos e floating panels. Use para interagir diretamente com os agentes.</p>
+    </div>
+  </section>
+
+  <section id="navigation">
+    <h2>Navegacao</h2>
+    <p>A navegacao esta disponivel de tres formas:</p>
+
+    <h3>Sidebar</h3>
+    <div class="card">
+      <p>Barra lateral expansivel no lado esquerdo. Contem navegacao principal com icones e labels. Clique no botao de toggle para expandir/colapsar.</p>
+    </div>
+
+    <h3>Command Palette</h3>
+    <div class="card">
+      <p>Pressione <code>Ctrl+K</code> ou <code>Cmd+K</code> para abrir a paleta de comandos. Digite para filtrar commands disponiveis:</p>
+      <ul>
+        <li>Navegar para views</li>
+        <li>Acessar agentes</li>
+        <li>Abrir paineis</li>
+        <li>Acoes rapidas</li>
+      </ul>
+    </div>
+
+    <h3>Click direto</h3>
+    <div class="card">
+      <p>Clique em qualquer no no canvas para ver seus detalhes no NodeDetailPanel. Clique duas vezes para abrir o chat com o agente.</p>
+    </div>
+  </section>
+
+  <section id="stack">
+    <h2>Stack Tecnologica</h2>
+    <div class="grid">
+      <div class="stat-card">
+        <div class="stat-label">Framework</div>
+        <div style="color:#fff;margin-top:0.25rem;font-weight:600;">React 18 + Vite 8</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Canvas</div>
+        <div style="color:#fff;margin-top:0.25rem;font-weight:600;">@xyflow/react v12</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Estilo</div>
+        <div style="color:#fff;margin-top:0.25rem;font-weight:600;">Tailwind CSS v4</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Estado</div>
+        <div style="color:#fff;margin-top:0.25rem;font-weight:600;">Zustand 5</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="project-structure">
+    <h2>Estrutura do Projeto</h2>
+    <pre><code>src/
+  App.tsx                   — app shell com router
+  main.tsx                  — entry point
+  index.css                 — estilos globais Tailwind
+  shared/
+    lib/utils.ts            — utilitarios (cn)
+  features/
+    canvas/                 — canvas principal
+    sidebar/                — sidebar + nav store
+    topbar/                 — topbar + breadcrumbs
+    activity-feed/           — feed de eventos
+    dashboard/              — metrics + node detail
+    command-palette/         — Cmd+K palette
+    workspace/              — workspace agents
+</code></pre>
+  </section>
+</div>
+</body>
+</html>

@@ -10,8 +10,6 @@ function AgentStatusBar() {
   const agents = useWorkspaceStore((s) => s.agents)
 
   const active = agents.filter((a) => a.status !== 'idle' && a.status !== 'error')
-  const idle = agents.filter((a) => a.status === 'idle')
-  const errors = agents.filter((a) => a.status === 'error')
 
   return (
     <div className="flex items-center gap-4 px-4 py-2 border-b border-white/[0.04] bg-black/20">

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'motion/react'
-import { Zap, Bot, Terminal, AlertCircle, CheckCircle2, XCircle } from 'lucide-react'
+import { Zap, Bot, AlertCircle, CheckCircle2, XCircle } from 'lucide-react'
 import { useWorkspaceStore } from '../stores/useWorkspaceStore'
 import type { WorkspaceEvent } from '../types/workspace.types'
 import { cn } from '@/shared/lib/utils'

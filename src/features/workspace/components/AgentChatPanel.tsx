@@ -6,9 +6,7 @@ import {
   Bot,
   User,
   Terminal,
-  Zap,
   Sparkles,
-  ChevronDown,
   Copy,
   CheckCheck,
 } from 'lucide-react'
@@ -47,7 +45,6 @@ function MessageBubble({ message }: { message: WorkspaceMessage }) {
   const isUser = message.role === 'user'
   const isSystem = message.role === 'system'
   const isTool = message.role === 'tool'
-  const isAgent = message.role === 'agent'
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message.content)

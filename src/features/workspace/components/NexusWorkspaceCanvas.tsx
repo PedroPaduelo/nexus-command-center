@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from 'react'
+import { useCallback, useMemo, useEffect, useState } from 'react'
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -21,10 +21,8 @@ import '@xyflow/react/dist/style.css'
 import { motion } from 'motion/react'
 import {
   LayoutGrid,
-  GitBranch,
   CircleDot,
   Clock,
-  Maximize2,
   Focus,
   Sparkles,
 } from 'lucide-react'
@@ -32,7 +30,7 @@ import {
 import { useWorkspaceStore } from '../stores/useWorkspaceStore'
 import { AgentCard } from './AgentCard'
 import { NexusEdgeAnimated } from './NexusEdgeAnimated'
-import type { Agent, WorkspaceView } from '../types/workspace.types'
+import type { WorkspaceView } from '../types/workspace.types'
 import { cn } from '@/shared/lib/utils'
 
 const nodeTypes: NodeTypes = {
@@ -70,8 +68,9 @@ const personalityColors: Record<string, string> = {
 }
 
 const miniMapNodeColor = (node: Node) => {
-  const agent = node.data as unknown as Agent
-  return personalityColors[agent.personality] || '#ffffff'
+  const data = node.data as Record<string, unknown>
+  const personality = data.personality as string
+  return personalityColors[personality] || '#ffffff'
 }
 
 const viewIcons: Record<WorkspaceView, React.ElementType> = {
@@ -98,7 +97,7 @@ function WorkspaceCanvasInner() {
       id: agent.id,
       type: 'agentNode',
       position: agent.position,
-      data: agent,
+      data: { ...agent } as Record<string, unknown>,
       selected: agent.id === focusedAgentId,
     }))
     setNodes(flowNodes)
@@ -110,7 +109,7 @@ function WorkspaceCanvasInner() {
       id: `e-${conn.source}-${conn.target}-${i}`,
       source: conn.source,
       target: conn.target,
-      type: 'nexusEdgeAnimated',
+      type: 'nexusEdgeAnimated' as const,
       animated: true,
       data: {
         color: conn.color,
@@ -133,7 +132,7 @@ function WorkspaceCanvasInner() {
 
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes) => {
-      setEdges((eds) => applyEdgeChanges(changes, eds))
+      setEdges((eds) => applyEdgeChanges(changes, eds) as ReturnType<typeof createEdgesFromConnections>)
     },
     []
   )
@@ -145,10 +144,10 @@ function WorkspaceCanvasInner() {
           {
             ...connection,
             type: 'nexusEdgeAnimated',
-            data: { color: '#3b82f6', animated: true },
+            data: { color: '#3b82f6', label: undefined, flowSpeed: 3 },
           },
           eds
-        )
+        ) as ReturnType<typeof createEdgesFromConnections>
       )
     },
     []
