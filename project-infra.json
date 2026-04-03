@@ -3,16 +3,17 @@
   "slug": "nexus-command-center",
   "description": "Nexus Command Center — Visual orchestration dashboard com React Flow",
   "createdAt": "2026-04-03T19:57:00Z",
-  "updatedAt": "2026-04-03T20:00:00Z",
+  "updatedAt": "2026-04-03T20:15:00Z",
   "services": [
     {
       "name": "frontend",
       "type": "frontend",
-      "port": 5100,
+      "port": 5173,
       "pm2Name": "nexus-command-center",
-      "domain": "nexus-lab-myke-2.serendiped.com",
-      "url": "https://nexus-lab-myke-2.serendiped.com",
-      "startCommand": "pm2 start ./node_modules/.bin/vite --name nexus-command-center -- preview --port 5100 --host 0.0.0.0",
+      "domain": null,
+      "domainNote": "Porta 5173 reachable via curl localhost. Proxy HTTPS nao disponivel para portas customizadas neste container EasyPanel. Dominos serendiped.com routam para container padrao do Orchestrator.",
+      "url": "http://10.0.4.49:5173",
+      "startCommand": "pm2 start ecosystem.config.cjs",
       "buildCommand": "npm run build"
     }
   ],
@@ -23,10 +24,11 @@
       "language": "TypeScript 5.9",
       "styling": "Tailwind CSS v4",
       "state": "Zustand 5",
-      "canvas": "@xyflow/react (React Flow)",
+      "canvas": "@xyflow/react (React Flow v12)",
       "ui": "Radix UI + Lucide React",
       "charts": "Recharts 3",
-      "animations": "motion/react"
+      "animations": "motion/react",
+      "commandPalette": "cmdk"
     }
   },
   "features": [
@@ -39,7 +41,9 @@
     "NexusNode com estados visuais (running, success, error)",
     "NexusEdge com animacao de fluxo",
     "NodeDetailPanel para detalhes do no selecionado",
-    "Design system dark glassmorphism premium"
+    "Design system dark glassmorphism premium",
+    "Dark mode padrao com tema dark",
+    "Responsivo e otimizado para production"
   ],
   "nodes": [
     { "id": "orquestrador", "label": "Orquestrador", "category": "agent" },
@@ -50,5 +54,9 @@
     { "id": "task-queue", "label": "Task Queue", "category": "service" },
     { "id": "monitoring", "label": "Monitoring", "category": "monitor" },
     { "id": "frontend", "label": "Frontend App", "category": "service" }
-  ]
+  ],
+  "github": {
+    "repo": "PedroPaduelo/nexus-command-center",
+    "url": "https://github.com/PedroPaduelo/nexus-command-center"
+  }
 }
