@@ -1,0 +1,505 @@
+@import "tailwindcss";
+
+/* ============================================
+   NEXUS COMMAND CENTER — Design System
+   Dark-first glassmorphism theme
+   Tailwind CSS v4 (CSS-first config)
+   ============================================ */
+
+@theme {
+  /* Background */
+  --color-nexus-bg: #0a0a0f;
+  --color-nexus-bg-elevated: #12121a;
+  --color-nexus-bg-surface: #1a1a25;
+
+  /* Glass */
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-hover: rgba(255, 255, 255, 0.06);
+  --color-glass-active: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.06);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.12);
+
+  /* Accent palette */
+  --color-accent-blue: #3b82f6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-emerald: #10b65a;
+
+  /* Accent subdued (for backgrounds) */
+  --color-accent-blue-dim: rgba(59, 130, 246, 0.12);
+  --color-accent-cyan-dim: rgba(6, 182, 212, 0.12);
+  --color-accent-violet-dim: rgba(139, 92, 246, 0.12);
+  --color-accent-emerald-dim: rgba(16, 182, 90, 0.12);
+
+  /* Text */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.6);
+  --color-text-muted: rgba(255, 255, 255, 0.3);
+  --color-text-accent: #3b82f6;
+
+  /* Glow */
+  --color-glow-blue: rgba(59, 130, 246, 0.4);
+  --color-glow-cyan: rgba(6, 182, 212, 0.4);
+  --color-glow-violet: rgba(139, 92, 246, 0.4);
+  --color-glow-emerald: rgba(16, 182, 90, 0.4);
+
+  /* Shadows */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+  --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 60px rgba(6, 182, 212, 0.1);
+  --shadow-glow-violet: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.1);
+  --shadow-glow-emerald: 0 0 20px rgba(16, 182, 90, 0.3), 0 0 60px rgba(16, 182, 90, 0.1);
+
+  /* Spacing / Radius */
+  --radius-glass: 16px;
+  --radius-glass-sm: 10px;
+  --radius-glass-lg: 24px;
+
+  /* Animations */
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-slide-in: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.3s ease-out forwards;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+}
+
+/* ============================================
+   Keyframes
+   ============================================ */
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.85; filter: brightness(1.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes gradient-rotate {
+  0% { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--glow-color, rgba(59, 130, 246, 0.3)); }
+  50% { box-shadow: 0 0 24px var(--glow-color, rgba(59, 130, 246, 0.5)), 0 0 48px var(--glow-color, rgba(59, 130, 246, 0.15)); }
+}
+
+/* ============================================
+   Base / Reset
+   ============================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background-color: var(--color-nexus-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Subtle grid pattern on body */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Radial vignette overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--color-nexus-bg) 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ============================================
+   Custom Scrollbar
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+/* ============================================
+   Glass Panel Utilities
+   ============================================ */
+
+.glass-panel {
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--shadow-glass);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-panel:hover {
+  background: var(--color-glass-hover);
+  border-color: var(--color-glass-border-hover);
+}
+
+.glass-panel-sm {
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-glass-sm);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-panel-flush {
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* ============================================
+   Glow Utilities
+   ============================================ */
+
+.glow-blue {
+  --glow-color: var(--color-glow-blue);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.glow-cyan {
+  --glow-color: var(--color-glow-cyan);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.glow-violet {
+  --glow-color: var(--color-glow-violet);
+  box-shadow: var(--shadow-glow-violet);
+}
+
+.glow-emerald {
+  --glow-color: var(--color-glow-emerald);
+  box-shadow: var(--shadow-glow-emerald);
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.glow-hover-blue:hover { box-shadow: var(--shadow-glow-blue); }
+.glow-hover-cyan:hover { box-shadow: var(--shadow-glow-cyan); }
+.glow-hover-violet:hover { box-shadow: var(--shadow-glow-violet); }
+.glow-hover-emerald:hover { box-shadow: var(--shadow-glow-emerald); }
+
+/* ============================================
+   Animated Gradient Border
+   ============================================ */
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.animated-border {
+  position: relative;
+  border: none !important;
+  overflow: hidden;
+  border-radius: var(--radius-glass);
+}
+
+.animated-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--gradient-angle, 0deg),
+    var(--color-accent-blue),
+    var(--color-accent-cyan),
+    var(--color-accent-violet),
+    var(--color-accent-emerald),
+    var(--color-accent-blue)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: gradient-rotate 4s linear infinite;
+  pointer-events: none;
+}
+
+.gradient-border {
+  position: relative;
+  border: none !important;
+  overflow: hidden;
+  border-radius: var(--radius-glass);
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-blue),
+    var(--color-accent-violet),
+    var(--color-accent-cyan)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================
+   Shimmer / Loading
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* ============================================
+   Text Utilities
+   ============================================ */
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-violet {
+  background: linear-gradient(135deg, var(--color-accent-violet), var(--color-accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   React Flow — Canvas & Nodes
+   ============================================ */
+
+.react-flow__renderer {
+  background: transparent !important;
+}
+
+.react-flow__background {
+  opacity: 0.3;
+}
+
+.react-flow__minimap {
+  background: var(--color-nexus-bg-elevated) !important;
+  border: 1px solid var(--color-glass-border) !important;
+  border-radius: var(--radius-glass-sm) !important;
+  overflow: hidden;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(59, 130, 246, 0.08) !important;
+  stroke: var(--color-accent-blue) !important;
+  stroke-width: 1 !important;
+}
+
+.react-flow__controls {
+  background: var(--color-glass) !important;
+  border: 1px solid var(--color-glass-border) !important;
+  border-radius: var(--radius-glass-sm) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-glass) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--color-glass-border) !important;
+  color: var(--color-text-secondary) !important;
+  fill: var(--color-text-secondary) !important;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--color-glass-hover) !important;
+  color: var(--color-text-primary) !important;
+  fill: var(--color-text-primary) !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+/* Edges */
+.react-flow__edge-path {
+  stroke: rgba(255, 255, 255, 0.12) !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--color-accent-blue) !important;
+  filter: drop-shadow(0 0 6px var(--color-glow-blue));
+}
+
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: 8;
+  animation: dash-flow 1s linear infinite;
+}
+
+@keyframes dash-flow {
+  to { stroke-dashoffset: -16; }
+}
+
+/* Handles */
+.react-flow__handle {
+  width: 8px !important;
+  height: 8px !important;
+  background: var(--color-nexus-bg-surface) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.react-flow__handle:hover {
+  border-color: var(--color-accent-blue) !important;
+  box-shadow: 0 0 8px var(--color-glow-blue);
+}
+
+/* Selection */
+.react-flow__selection {
+  background: rgba(59, 130, 246, 0.06) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 4px;
+}
+
+/* Node base */
+.react-flow__node {
+  cursor: grab !important;
+}
+
+.react-flow__node:active {
+  cursor: grabbing !important;
+}
+
+.react-flow__node.selected .glass-panel {
+  border-color: var(--color-accent-blue) !important;
+  box-shadow: var(--shadow-glow-blue);
+}
+
+/* Hide attribution */
+.react-flow__attribution {
+  display: none !important;
+}
+
+/* ============================================
+   Misc Utilities
+   ============================================ */
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.transition-default {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-nexus-bg), 0 0 0 4px var(--color-accent-blue);
+}
+
+/* Status dots */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot-active {
+  background: var(--color-accent-emerald);
+  box-shadow: 0 0 8px var(--color-glow-emerald);
+}
+
+.status-dot-idle {
+  background: var(--color-text-muted);
+}
+
+.status-dot-error {
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.status-dot-running {
+  background: var(--color-accent-blue);
+  box-shadow: 0 0 8px var(--color-glow-blue);
+  animation: pulse-glow 2s ease-in-out infinite;
+}

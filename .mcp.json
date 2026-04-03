@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "mcp-easypanel": {
+      "type": "http",
+      "url": "https://nommand-mcp-easypanel.ddw1sl.easypanel.host/mcp"
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "web-browser": {
+      "type": "http",
+      "url": "https://mcp-browser.ddw1sl.easypanel.host/mcp "
+    },
+    "orquestrador": {
+      "type": "http",
+      "url": "http://0.0.0.0:3334/mcp"
+    }
+  }
+}
