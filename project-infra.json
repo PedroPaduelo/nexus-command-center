@@ -1,0 +1,54 @@
+{
+  "projectName": "nexus-command-center",
+  "slug": "nexus-command-center",
+  "description": "Nexus Command Center — Visual orchestration dashboard com React Flow",
+  "createdAt": "2026-04-03T19:57:00Z",
+  "updatedAt": "2026-04-03T20:00:00Z",
+  "services": [
+    {
+      "name": "frontend",
+      "type": "frontend",
+      "port": 5100,
+      "pm2Name": "nexus-command-center",
+      "domain": "nexus-lab-myke-2.serendiped.com",
+      "url": "https://nexus-lab-myke-2.serendiped.com",
+      "startCommand": "pm2 start ./node_modules/.bin/vite --name nexus-command-center -- preview --port 5100 --host 0.0.0.0",
+      "buildCommand": "npm run build"
+    }
+  ],
+  "stack": {
+    "frontend": {
+      "framework": "React 18",
+      "buildTool": "Vite 8",
+      "language": "TypeScript 5.9",
+      "styling": "Tailwind CSS v4",
+      "state": "Zustand 5",
+      "canvas": "@xyflow/react (React Flow)",
+      "ui": "Radix UI + Lucide React",
+      "charts": "Recharts 3",
+      "animations": "motion/react"
+    }
+  },
+  "features": [
+    "Canvas de orquestracao visual (React Flow)",
+    "Sidebar com navegacao e expandir/collapse",
+    "Topbar com breadcrumbs e notifications",
+    "Command Palette (Cmd+K) com cmdk",
+    "MetricsPanel com sparklines e animacoes count-up",
+    "ActivityFeed com timeline de eventos",
+    "NexusNode com estados visuais (running, success, error)",
+    "NexusEdge com animacao de fluxo",
+    "NodeDetailPanel para detalhes do no selecionado",
+    "Design system dark glassmorphism premium"
+  ],
+  "nodes": [
+    { "id": "orquestrador", "label": "Orquestrador", "category": "agent" },
+    { "id": "claude-agent", "label": "Claude Agent", "category": "agent" },
+    { "id": "api-gateway", "label": "API Gateway", "category": "api" },
+    { "id": "postgresql", "label": "PostgreSQL", "category": "database" },
+    { "id": "redis", "label": "Redis Cache", "category": "database" },
+    { "id": "task-queue", "label": "Task Queue", "category": "service" },
+    { "id": "monitoring", "label": "Monitoring", "category": "monitor" },
+    { "id": "frontend", "label": "Frontend App", "category": "service" }
+  ]
+}
