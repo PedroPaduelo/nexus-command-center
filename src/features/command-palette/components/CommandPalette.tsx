@@ -30,6 +30,7 @@ const actions = [
 ]
 
 const navigation = [
+  { id: 'workspace', icon: Bot, label: 'Workspace', description: 'Interactive AI agents workspace' },
   { id: 'canvas', icon: LayoutDashboard, label: 'Canvas', description: 'Main orchestration view' },
   { id: 'agents', icon: Bot, label: 'Agents', description: 'Manage AI agents' },
   { id: 'services', icon: Server, label: 'Services', description: 'Service management' },

@@ -7,6 +7,7 @@ import { CommandPalette } from '@/features/command-palette/components/CommandPal
 import { ActivityFeed } from '@/features/activity-feed/components/ActivityFeed'
 import { MetricsPanel } from '@/features/dashboard/components/MetricsPanel'
 import { NodeDetailPanel } from '@/features/dashboard/components/NodeDetailPanel'
+import { WorkspaceView } from '@/features/workspace/components/WorkspaceView'
 import { useNavStore } from '@/features/sidebar/components/NavStore'
 import { useCanvasStore } from '@/features/canvas/hooks/useCanvasStore'
 
@@ -35,6 +36,12 @@ export default function App() {
         <Topbar onOpenCommand={() => setCommandOpen(true)} />
 
         <main className="flex flex-1 min-h-0 relative">
+          {activeView === 'workspace' && (
+            <div className="flex-1 min-w-0">
+              <WorkspaceView />
+            </div>
+          )}
+
           {activeView === 'canvas' && (
             <div className="flex-1 min-w-0">
               <CanvasView />

@@ -13,6 +13,7 @@ import { cn } from '@/shared/lib/utils'
 import { useNavStore } from './NavStore'
 
 const navItems = [
+  { id: 'workspace', label: 'Workspace', icon: Bot },
   { id: 'canvas', label: 'Canvas', icon: LayoutDashboard },
   { id: 'agents', label: 'Agents', icon: Bot },
   { id: 'services', label: 'Services', icon: Server },
